@@ -10,6 +10,14 @@ One skill set per language. The entry point is that language's getting-started s
 | --- | --- | --- |
 | C#/.NET | `dotnet-` | `dotnet-authentication`, `dotnet-calling-endpoints`, `dotnet-client-initialization`, `dotnet-configuration-resilience`, `dotnet-error-handling`, `dotnet-getting-started`, `dotnet-integrate-maxio-advanced-billing`, `dotnet-models`, `dotnet-testing` |
 
+## Agents
+
+| Agent | What it does |
+| --- | --- |
+| `dotnet-maxio-advanced-billing-planner` | Writes `maxio-advanced-billing-plan.md` — the plan and its map-grounded contract sheet — before any code, and revises it in place when the main agent sends a clarification. It writes no project code. `dotnet-integrate-maxio-advanced-billing` tells the main agent when to start it. |
+
+The same agent ships in three formats, with one body: `agents/` (Claude Code, Cursor, opencode), `codex/agents/` (Codex) and `agents-vscode/` (VS Code).
+
 ## Install
 
 This plugin was **generated for you, not published to a shared plugin marketplace** — so you install it from a local path rather than by name. Point your coding agent at the directory holding this plugin, then install it:
