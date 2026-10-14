@@ -14,9 +14,13 @@ One skill set per language. The entry point is that language's getting-started s
 
 | Agent | What it does |
 | --- | --- |
-| `dotnet-maxio-advanced-billing-planner` | Writes `maxio-advanced-billing-plan.md` — the plan and its map-grounded contract sheet — before any code, and revises it in place when the main agent sends a clarification. It writes no project code. `dotnet-integrate-maxio-advanced-billing` tells the main agent when to start it. |
+| `maxio-advanced-billing-planner` | Writes `maxio-advanced-billing-plan.md`, the plan and its contract sheet, before any project file changes, and revises it in place. `dotnet-integrate-maxio-advanced-billing` starts it first, on the main agent's own model. |
 
-The same agent ships in three formats, with one body: `agents/` (Claude Code, Cursor, opencode), `codex/agents/` (Codex) and `agents-vscode/` (VS Code).
+How each host gets it:
+
+- **Claude Code** loads it from `agents/` with the plugin and lists it as `maxio-advanced-billing:maxio-advanced-billing-planner`. Its file sets `model: inherit`, so it runs on the main agent's model.
+- **Codex** plugins can't ship agents, so the same instructions ship as the skill `maxio-advanced-billing-planner-brief`. The main agent starts a general-purpose subagent and has it load that skill.
+- **With no subagents at all** (turned off, or a host without them), the main agent says so in one line and writes the plan itself before any code.
 
 ## Install
 

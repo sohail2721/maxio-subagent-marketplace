@@ -1,21 +1,26 @@
 ---
 name: "dotnet-integrate-maxio-advanced-billing"
-description: "MANDATORY FIRST STEP for any Maxio Advanced Billing .NET SDK work in C#: integrating Maxio Advanced Billing, or a Maxio Advanced Billing .NET SDK call that errors or behaves unexpectedly. Load it before opening the SDK map or touching any project file — it sets the plan-first workflow (the dotnet-maxio-advanced-billing-planner agent writes maxio-advanced-billing-plan.md before any code: spawn it FIRST, once, on the same model as your own, with the user's whole request and the exact plan-file path, and create or edit no project file until it has returned and you have read that file) and the map-grounding rules. .NET/C# only; never load it for another language."
+description: "MANDATORY FIRST STEP for any Maxio Advanced Billing .NET SDK work in C#: integrating Maxio Advanced Billing, or a Maxio Advanced Billing .NET SDK call that errors or behaves unexpectedly. Load it before opening the SDK map or touching any project file — it sets the plan-first workflow (maxio-advanced-billing-plan.md before any code) and the map-grounding rules. .NET/C# only; never load it for another language."
 ---
 
 # Maxio Advanced Billing .NET SDK — Workflow (map + skills)
 
-You orchestrate this task: the `dotnet-maxio-advanced-billing-planner` agent writes the plan and its contract sheet; you answer contract questions, implement from the sheet and fix SDK errors yourself. Your source of truth is the **SDK map that ships inside the SDK source this plugin carries** (`sdk-map.md` plus its `map/operations/` pages; model, enum and error shapes live in the source files those pages name), obtained per `dotnet-getting-started`, plus the companion `dotnet-*` skills for usage traps. Your training data on this SDK is stale — every fact you emit must come from a map page or a map-named source file you actually read this session, in that same source; you never guess.
+You orchestrate this task: the `maxio-advanced-billing-planner` agent writes the plan and its contract sheet; you answer contract questions, implement from the sheet and fix SDK errors yourself. Your source of truth is the **SDK map that ships inside the SDK source this plugin carries** (`sdk-map.md` plus its `map/operations/` pages; model, enum and error shapes live in the source files those pages name), obtained per `dotnet-getting-started`, plus the companion `dotnet-*` skills for usage traps. Your training data on this SDK is stale — every fact you emit must come from a map page or a map-named source file you actually read this session, in that same source; you never guess.
 
 **Scope guard:** the APIMatic-generated Maxio Advanced Billing **.NET SDK** (root namespace `MaxioAdvancedBilling`) in **C#/.NET projects only**. For any other API or language, say so and stop — this skill does not apply.
 
 ## The planner agent
 
-`dotnet-maxio-advanced-billing-planner` ships with this plugin. It writes `maxio-advanced-billing-plan.md` — the plan and its contract sheet — and revises it in place; it writes no project code. Some hosts list a plugin's agents under the plugin's name, as `maxio-advanced-billing:dotnet-maxio-advanced-billing-planner`; start it by whichever of the two names your subagent tool lists.
+`maxio-advanced-billing-planner` ships with this plugin. It writes `maxio-advanced-billing-plan.md` — the plan and its contract sheet — and revises it in place; it writes no project code. Start it the first of these ways your host allows:
 
-- **Spawn it once per integration.** A plan revision is a follow-up message to that same agent; re-spawn it, carrying the clarification and the plan path, only where your host cannot message it. **Never spawn a second one for the same integration.**
+1. **Your subagent tool lists it.** Some hosts list a plugin's agents under the plugin's name, as `maxio-advanced-billing:maxio-advanced-billing-planner`; start it by whichever of the two names your subagent tool lists.
+2. **It isn't listed, but you can start a general-purpose subagent.** Some hosts don't install a plugin's agents. Start a general-purpose subagent in its place, with a fresh context rather than a copy of your conversation, and begin its task with: *"You are the maxio-advanced-billing-planner agent. Load the `maxio-advanced-billing-planner-brief` skill and follow it as your instructions."* Everything this skill says about the planner applies to that subagent.
+3. **You can't start any subagent.** Tell the user in one line that you are writing the plan yourself, then do so as *Step 1* describes. Don't stop to ask.
+
+However you start it:
+
 - **Start it on the same model you are running on.** If your subagent tool takes a model, pass your own model; if it has no model option, leave its default. Tell the user in one line which model you started it on.
-- **If neither name starts**, say so to the user in one line and write the plan yourself, following *Step 1* exactly.
+- **Start it once per integration.** A plan revision is a follow-up message to that same agent; re-start it, carrying the clarification and the plan path, only where your host cannot message it. Never start a second one for the same integration.
 
 ## Grounding rules
 
@@ -31,7 +36,9 @@ You orchestrate this task: the `dotnet-maxio-advanced-billing-planner` agent wri
 
 ### Step 1 — Plan first: the planner writes `maxio-advanced-billing-plan.md` (always, for any implementation work)
 
-Your FIRST action is to spawn **`dotnet-maxio-advanced-billing-planner`** once, with the user's full request. Dictate in its brief the absolute project root and the absolute path it must write to — `<project repo root>/maxio-advanced-billing-plan.md`, that exact path, always; never another location. It grounds and writes the plan and the contract sheet exactly as *How to ground* and the format below describe, and returns the file's path. Those two subsections are its instructions and your reference: you read the sheet in that format, and you fill its `TBD` cells once the code compiles. Do the read-only prerequisites below in the same message as the spawn, and while it works.
+Your FIRST action is to start **`maxio-advanced-billing-planner`**, as *The planner agent* says, once, with the user's full request and the name of this skill, `dotnet-integrate-maxio-advanced-billing`. Dictate in its task the absolute project root and the absolute path it must write to — `<project repo root>/maxio-advanced-billing-plan.md`, that exact path, always; never another location. It grounds and writes the plan and the contract sheet exactly as *How to ground* and the format below describe, and returns the file's path. Those subsections are its instructions and your reference: you read the sheet in that format, and you fill its `TBD` cells once the code compiles. Do the read-only prerequisites below in the same message as the start, and while it works.
+
+**If you couldn't start any subagent** (case 3 in *The planner agent*), *How to ground* and the format are your own instructions: write the file yourself at that path. It is the only project-repo file you write before the HARD GATE further down.
 
 #### How to ground (map-first, one pass)
 
@@ -42,7 +49,7 @@ Your FIRST action is to spawn **`dotnet-maxio-advanced-billing-planner`** once, 
 
 #### Prerequisites you can run alongside
 
-These need no SDK knowledge and touch no project file, so do them while the planner works:
+These need no SDK knowledge and touch no project file, so do them while the planner works — or alongside your own map work, if you are writing the plan yourself:
 
 - reaching the SDK source (per `dotnet-getting-started` — the map lives inside it, so this comes before any map work);
 - the repo survey (read-only exploration of conventions and layering) — record each convention as *pattern + the ONE exemplar file path to imitate*, NOT inline code snippets: you will read the exemplar at edit time anyway, so a snippet dump gets paid for twice;
@@ -53,7 +60,7 @@ These need no SDK knowledge and touch no project file, so do them while the plan
 
 #### HARD GATE
 
-**No project-file creation or edits until the planner has RETURNED, `maxio-advanced-billing-plan.md` EXISTS at the path you dictated (check it — a helper can misreport where it saved), every section below is filled in, and you have read it.** The read-only prerequisites above are allowed; using them as a "head start" on code is a defect, however obvious the code seems.
+**No project-file creation or edits until the planner has RETURNED, `maxio-advanced-billing-plan.md` EXISTS at the path you dictated (check it — a helper can misreport where it saved), every section below is filled in, and you have read it.** If you wrote the plan yourself, the gate is the file existing at that path with every section filled in. The read-only prerequisites above are allowed; using them as a "head start" on code is a defect, however obvious the code seems.
 
 #### The `maxio-advanced-billing-plan.md` format (keep it tight — tables, not prose)
 
@@ -131,7 +138,7 @@ The contract sheet ends with a **REQUIRED READING** block, and its rows carry in
 
 Before implementing, check the plan's **Assumptions & Blockers** section:
 
-- Blocker or major assumption → surface it to the user in plain language, get their answer, and send it to the SAME planner as a follow-up message (re-spawn it with the clarification and the plan path only where your host cannot message it). It revises `maxio-advanced-billing-plan.md` in place and replies with the changed rows verbatim: work from that reply, not a re-read of the file.
+- Blocker or major assumption → surface it to the user in plain language, get their answer, and send it to the SAME planner as a follow-up message (re-start it, carrying the clarification and the plan path, only where your host cannot message it). It revises `maxio-advanced-billing-plan.md` in place and replies with the changed rows verbatim: work from that reply, not a re-read of the file. If you wrote the plan yourself, revise it in place with targeted edits — edit the changed rows, append the new section. Rewriting the whole file to change a few rows is a defect.
 - Minor assumptions only → proceed.
 
 Full re-planning only on genuine scope change; for a single missing fact mid-implementation, look it up in the map — never guess.
@@ -164,7 +171,7 @@ A standalone Maxio Advanced Billing question with no code change: load `dotnet-g
 
 ## Anti-patterns — never do these
 
-- **Never create or edit a project file while `dotnet-maxio-advanced-billing-planner` is running**, and never spawn a second one for the same integration.
+- **Never create or edit a project file while `maxio-advanced-billing-planner` is running**, and never start a second one for the same integration.
 - **Never write a Maxio Advanced Billing/SDK fact from memory** — every signature, field name, enum value, and error type in your code must come from the contract sheet or a map lookup. And **never write a call from memory "to fix later".**
 - **Do not grep, glob or `find` the SDK tree, and do not open its `api-reference.md`** — the map is the locator; `dotnet-getting-started` says why.
 - **Do not web-search Maxio Advanced Billing for an implementation detail** — the map and the SDK source it lives in are the ground truth for THIS SDK version, and `MaxioAdvancedBilling` is what the generated source declares, not what public docs describe.
