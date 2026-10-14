@@ -8,7 +8,9 @@
   },
   "license": "MIT",
   "skills": [
-    "./skills/dotnet",
-    "./skills/maxio-advanced-billing-planner-brief"
+    "./skills/dotnet"
+  ],
+  "agents": [
+    "./agents/maxio-advanced-billing-planner.md"
   ]
 }
