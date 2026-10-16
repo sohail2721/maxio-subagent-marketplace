@@ -11,6 +11,6 @@
     "./skills/dotnet"
   ],
   "agents": [
-    "./agents/maxio-advanced-billing-planner.md"
+    "./agents/maxio-advanced-billing-implementer.md"
   ]
 }
