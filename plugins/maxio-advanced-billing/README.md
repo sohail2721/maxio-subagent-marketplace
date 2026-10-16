@@ -15,11 +15,12 @@ One skill set per language. The entry point is that language's getting-started s
 | Agent | What it does |
 | --- | --- |
 | `maxio-advanced-billing-planner` | Writes `maxio-advanced-billing-plan.md`, the plan and its contract sheet, before any project file changes, and revises it in place. `dotnet-integrate-maxio-advanced-billing` starts it first, on the main agent's own model. |
+| `maxio-advanced-billing-implementer` | Implements the integration from the finished plan: loads the skills the contract sheet names, writes the code, builds, runs the tests and fills the sheet's `TBD` cells, then fixes what the main agent sends back. `dotnet-integrate-maxio-advanced-billing` starts it after the plan, on the main agent's own model. |
 
-How each host gets it:
+How each host gets them:
 
-- **Claude Code** loads it from `claude-code/agents/` with the plugin and lists it as `maxio-advanced-billing:maxio-advanced-billing-planner`. Its file sets `model: inherit`, so it runs on the main agent's model.
-- **Where no subagent tool lists it** (a host that doesn't load a plugin's agents, or subagents turned off), the main agent says so in one line and writes the plan itself before any code.
+- **Claude Code** loads both from `claude-code/agents/` with the plugin and lists them as `maxio-advanced-billing:maxio-advanced-billing-planner` and `maxio-advanced-billing:maxio-advanced-billing-implementer`. Their files set `model: inherit`, so they run on the main agent's model.
+- **Where no subagent tool lists them** (a host that doesn't load a plugin's agents, or subagents turned off), the main agent says so in one line, writes the plan itself before any code and implements it.
 
 ## Install
 

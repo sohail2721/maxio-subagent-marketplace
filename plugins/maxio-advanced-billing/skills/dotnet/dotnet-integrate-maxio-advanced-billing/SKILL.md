@@ -5,7 +5,7 @@ description: "MANDATORY FIRST STEP for any Maxio Advanced Billing .NET SDK work 
 
 # Maxio Advanced Billing .NET SDK — Workflow (map + skills)
 
-You orchestrate this task: the `maxio-advanced-billing-planner` agent writes the plan and its contract sheet; you answer contract questions, implement from the sheet and fix SDK errors yourself. Your source of truth is the **SDK map that ships inside the SDK source this plugin carries** (`sdk-map.md` plus its `map/operations/` pages; model, enum and error shapes live in the source files those pages name), obtained per `dotnet-getting-started`, plus the companion `dotnet-*` skills for usage traps. Your training data on this SDK is stale — every fact you emit must come from a map page or a map-named source file you actually read this session, in that same source; you never guess.
+You orchestrate this task: the `maxio-advanced-billing-planner` agent writes the plan and its contract sheet; the `maxio-advanced-billing-implementer` agent implements from the sheet and fixes SDK errors; you answer contract questions and check the result end to end. Your source of truth is the **SDK map that ships inside the SDK source this plugin carries** (`sdk-map.md` plus its `map/operations/` pages; model, enum and error shapes live in the source files those pages name), obtained per `dotnet-getting-started`, plus the companion `dotnet-*` skills for usage traps. Your training data on this SDK is stale — every fact you emit must come from a map page or a map-named source file you actually read this session, in that same source; you never guess.
 
 **Scope guard:** the APIMatic-generated Maxio Advanced Billing **.NET SDK** (root namespace `MaxioAdvancedBilling`) in **C#/.NET projects only**. For any other API or language, say so and stop — this skill does not apply.
 
@@ -20,6 +20,18 @@ However you start it:
 
 - **Start it on the same model you are running on.** If your subagent tool takes a model, pass your own model; if it has no model option, leave its default. Tell the user in one line which model you started it on.
 - **Start it once per integration.** A plan revision is a follow-up message to that same agent; re-start it, carrying the clarification and the plan path, only where your host cannot message it. Never start a second one for the same integration.
+
+## The implementer agent
+
+`maxio-advanced-billing-implementer` ships with this plugin. Once `maxio-advanced-billing-plan.md` is complete, it does *Step 2*'s reading and *Step 3* items 1–5 from the sheet — loads the skills the sheet names, writes the code, builds and fills the `TBD` cells — runs the project's tests, and fixes SDK errors as *Step 4* says. Start it the first of these ways your host allows:
+
+1. **Your subagent tool lists it.** Some hosts list a plugin's agents under the plugin's name, as `maxio-advanced-billing:maxio-advanced-billing-implementer`; start it by whichever of the two names your subagent tool lists.
+2. **It isn't listed, or you can't start a subagent.** Tell the user in one line that you are implementing it yourself, then do *Step 2* and *Step 3* yourself. Don't stop to ask.
+
+However you start it:
+
+- **Start it on the same model you are running on.** If your subagent tool takes a model, pass your own model; if it has no model option, leave its default. Tell the user in one line which model you started it on.
+- **Start it once per integration**, with the user's full request, the name of this skill, `dotnet-integrate-maxio-advanced-billing`, the absolute project root and the plan's absolute path. A fix is a follow-up message to that same agent; re-start it, carrying the fix and the plan path, only where your host cannot message it. Never start a second one for the same integration.
 
 ## Grounding rules
 
@@ -133,6 +145,8 @@ Keep the file lean: no copied map pages, no full model dumps, and no path beyond
 
 ### Step 2 — Required reading (do this before you write any code)
 
+**With the implementer** (*The implementer agent*): check **Assumptions & Blockers** below, then start it; this reading and *Step 3* items 1–5 are its work.
+
 The contract sheet ends with a **REQUIRED READING** block, and its rows carry inline `MUST load <skill>` pointers. **Load every `dotnet-*` skill the sheet names, now, before you start implementing** — not lazily at the step that needs it; the sheet names hazards, not their answers. If the sheet names none, load `dotnet-error-handling` anyway — every integration writes an error boundary.
 
 Before implementing, check the plan's **Assumptions & Blockers** section:
@@ -150,6 +164,8 @@ Full re-planning only on genuine scope change; for a single missing fact mid-imp
 4. **Any compile or runtime error involving an SDK type or member** → *Step 4* below, after at most one self-fix.
 5. Once the code is complete, open each member the **DUPLICATE CLAIMS** and **UNKNOWN OUTCOMES** rows name and confirm it runs when that write runs. Where the code falls short of a row, fix the code, not the row.
 6. Run the project's tests (`dotnet test`); verify the integration end to end the way the task demands.
+
+**With the implementer**, items 1–5 and the `dotnet test` run are its work. When it returns, verify end to end the way the task demands, and send each gap back to it as a follow-up message; fix one yourself only where your host cannot message it.
 
 ### Step 4 — Fixing SDK errors (map-first, in place)
 
@@ -170,7 +186,7 @@ A standalone Maxio Advanced Billing question with no code change: load `dotnet-g
 
 ## Anti-patterns — never do these
 
-- **Never create or edit a project file while `maxio-advanced-billing-planner` is running**, and never start a second one for the same integration.
+- **Never create or edit a project file while `maxio-advanced-billing-planner` or `maxio-advanced-billing-implementer` is running**, and never start a second one of either for the same integration.
 - **Never write a Maxio Advanced Billing/SDK fact from memory** — every signature, field name, enum value, and error type in your code must come from the contract sheet or a map lookup. And **never write a call from memory "to fix later".**
 - **Do not grep, glob or `find` the SDK tree, and do not open its `api-reference.md`** — the map is the locator; `dotnet-getting-started` says why.
 - **Do not web-search Maxio Advanced Billing for an implementation detail** — the map and the SDK source it lives in are the ground truth for THIS SDK version, and `MaxioAdvancedBilling` is what the generated source declares, not what public docs describe.
