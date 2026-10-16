@@ -14,8 +14,7 @@ You orchestrate this task: the `maxio-advanced-billing-planner` agent writes the
 `maxio-advanced-billing-planner` ships with this plugin. It writes `maxio-advanced-billing-plan.md` — the plan and its contract sheet — and revises it in place; it writes no project code. Start it the first of these ways your host allows:
 
 1. **Your subagent tool lists it.** Some hosts list a plugin's agents under the plugin's name, as `maxio-advanced-billing:maxio-advanced-billing-planner`; start it by whichever of the two names your subagent tool lists.
-2. **It isn't listed, but you can start a general-purpose subagent.** Some hosts don't install a plugin's agents. Start a general-purpose subagent in its place, with a fresh context rather than a copy of your conversation, and begin its task with: *"You are the maxio-advanced-billing-planner agent. Load the `maxio-advanced-billing-planner-brief` skill and follow it as your instructions."* Everything this skill says about the planner applies to that subagent.
-3. **You can't start any subagent.** Tell the user in one line that you are writing the plan yourself, then do so as *Step 1* describes. Don't stop to ask.
+2. **It isn't listed, or you can't start a subagent.** Tell the user in one line that you are writing the plan yourself, then do so as *Step 1* describes. Don't stop to ask.
 
 However you start it:
 
@@ -38,7 +37,7 @@ However you start it:
 
 Your FIRST action is to start **`maxio-advanced-billing-planner`**, as *The planner agent* says, once, with the user's full request and the name of this skill, `dotnet-integrate-maxio-advanced-billing`. Dictate in its task the absolute project root and the absolute path it must write to — `<project repo root>/maxio-advanced-billing-plan.md`, that exact path, always; never another location. It grounds and writes the plan and the contract sheet exactly as *How to ground* and the format below describe, and returns the file's path. Those subsections are its instructions and your reference: you read the sheet in that format, and you fill its `TBD` cells once the code compiles. Do the read-only prerequisites below in the same message as the start, and while it works.
 
-**If you couldn't start any subagent** (case 3 in *The planner agent*), *How to ground* and the format are your own instructions: write the file yourself at that path. It is the only project-repo file you write before the HARD GATE further down.
+**If you couldn't start the planner** (case 2 in *The planner agent*), *How to ground* and the format are your own instructions: write the file yourself at that path. It is the only project-repo file you write before the HARD GATE further down.
 
 #### How to ground (map-first, one pass)
 

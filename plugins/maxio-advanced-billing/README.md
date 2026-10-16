@@ -18,9 +18,8 @@ One skill set per language. The entry point is that language's getting-started s
 
 How each host gets it:
 
-- **Claude Code** loads it from `agents/` with the plugin and lists it as `maxio-advanced-billing:maxio-advanced-billing-planner`. Its file sets `model: inherit`, so it runs on the main agent's model.
-- **Codex** plugins can't ship agents, so the same instructions ship as the skill `maxio-advanced-billing-planner-brief`. The main agent starts a general-purpose subagent and has it load that skill.
-- **With no subagents at all** (turned off, or a host without them), the main agent says so in one line and writes the plan itself before any code.
+- **Claude Code** loads it from `claude-code/agents/` with the plugin and lists it as `maxio-advanced-billing:maxio-advanced-billing-planner`. Its file sets `model: inherit`, so it runs on the main agent's model.
+- **Where no subagent tool lists it** (a host that doesn't load a plugin's agents, or subagents turned off), the main agent says so in one line and writes the plan itself before any code.
 
 ## Install
 

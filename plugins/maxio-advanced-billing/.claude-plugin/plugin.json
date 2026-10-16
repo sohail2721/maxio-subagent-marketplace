@@ -11,6 +11,6 @@
     "./skills/dotnet"
   ],
   "agents": [
-    "./agents/maxio-advanced-billing-planner.md"
+    "./claude-code/agents/maxio-advanced-billing-planner.md"
   ]
 }
