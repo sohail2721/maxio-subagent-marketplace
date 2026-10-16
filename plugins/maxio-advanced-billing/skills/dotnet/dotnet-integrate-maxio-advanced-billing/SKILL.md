@@ -58,6 +58,8 @@ These need no SDK knowledge and touch no project file, so do them while the plan
 - credentials/environment verification (per the task's secret-handling rules);
 - setting up your task tracking.
 
+While the planner works, these are all you do: reaching the SDK source means finding where it sits, not opening the map, its files or the other `dotnet-*` skills. Then wait for the planner to return, and don't message it before then unless it asks you something.
+
 #### HARD GATE
 
 **No project-file creation or edits until the planner has RETURNED, `maxio-advanced-billing-plan.md` EXISTS at the path you dictated (check it — a helper can misreport where it saved), every section below is filled in, and you have read it.** If you wrote the plan yourself, the gate is the file existing at that path with every section filled in. The read-only prerequisites above are allowed; using them as a "head start" on code is a defect, however obvious the code seems.
