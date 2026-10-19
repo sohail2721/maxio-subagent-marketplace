@@ -32,7 +32,7 @@ However you start it:
 However you start it:
 
 - **Start it on the same model you are running on.** If your subagent tool takes a model, pass your own model; if it has no model option, leave its default. Tell the user in one line which model you started it on.
-- **Start it once per integration**, with the user's full request, the name of this skill, `dotnet-integrate-maxio-advanced-billing`, the absolute project root and the plan's absolute path. A fix is a follow-up message to that same agent; re-start it, carrying the fix and the plan path, only where your host cannot message it. Never start a second one for the same integration.
+- **Start it once per integration**, with the user's full request, the name of this skill, `dotnet-integrate-maxio-advanced-billing`, the absolute project root and the plan's absolute path. To fix something after it has returned, start it again in the foreground with the fixes, the plan path and the path of its notes file, `maxio-advanced-billing-implementer-notes.md` next to the plan; it reads its notes first instead of rebuilding its context. Don't send a fix as a message to the finished agent: that resumes it in the background, where a headless session stops it 10 minutes after your last turn. Never run two at once.
 - **Start it in the foreground, not in the background**: you have nothing to do until it returns, and its report comes back as the result of that call.
 
 ## Grounding rules
