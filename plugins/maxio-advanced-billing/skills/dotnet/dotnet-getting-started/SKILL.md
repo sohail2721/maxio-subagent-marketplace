@@ -9,15 +9,15 @@ description: "Load for any Maxio Advanced Billing .NET SDK contract fact in C#, 
 
 Usage companions: `dotnet-client-initialization`, `dotnet-authentication`, `dotnet-calling-endpoints`, `dotnet-models`, `dotnet-error-handling`, `dotnet-configuration-resilience`, `dotnet-testing`. The SDK map is authoritative for the SDK's *surface* (signatures, model shapes, enums, which error type an operation throws); the companions are the *usage layer* — how to call each piece and the gotchas a signature cannot show. Reading the map or source does not replace a step's companion: at each step below, load the companion *and* confirm names against the map.
 
-> **Ground every signature, model, enum, and error type in the SDK map** (`sdk-map.md` + `map/operations/`, inside the SDK source bundled in this plugin — see the *SDK source* section for where it sits); **never fill a gap from memory.**
+> **Ground every signature, model, enum, and error type in the SDK map** (`sdk-map.md` + `map/operations/`, inside the SDK source repo — see the *SDK source* section for obtaining it); **never fill a gap from memory.**
 
 ## SDK identity
 
 |  |  |
 | --- | --- |
 | API | Maxio Advanced Billing |
-| Package | *generated for this plugin, not published — see *Install* below* |
-| SDK source | `sdk/dotnet/` inside this plugin (generated with it) |
+| NuGet package | `sohail-ab-sdk` (install version-less — see *Install* below) |
+| Source repo | https://github.com/sohail2721/sohail-ab-sdk (branch `main` — the ref this map documents) |
 | Root namespace | `MaxioAdvancedBilling` (the `using` namespace) |
 | Client class | `MaxioAdvancedBillingClient` |
 | Options class | `MaxioAdvancedBillingClientOptions` |
@@ -38,27 +38,25 @@ The SDK splits its public types across **separate child namespaces**. C# does **
 
 Models, enums, union types and the generated error types each sit in their own child namespace. The map's **Namespaces by content type** table maps each source directory to its namespace, so read the namespace off the path the map gives for the type; anything left ambiguous is settled by the `namespace` declaration at the top of the type's own file.
 
-## Install — reference the SDK that ships in this plugin
+## Install — add the NuGet package
 
-This SDK is **not on NuGet** — it was generated for this plugin and ships inside it as source, at `sdk/dotnet/` relative to the plugin root (the directory holding `skills/`). Reference the project where it sits, from the project that will call Maxio Advanced Billing:
+This SDK is published to NuGet. Install it **version-less** into the project that will call Maxio Advanced Billing — it floats to the latest release (do not pin a version from memory) and pulls the SDK's runtime dependencies in transitively:
 
 ```bash
-dotnet add <your-project>.csproj reference <plugin-root>/sdk/dotnet/src/MaxioAdvancedBilling/MaxioAdvancedBilling.csproj
+dotnet add package sohail-ab-sdk
 ```
 
-**That reference is local to this machine.** `dotnet add reference` writes a `<ProjectReference>` whose path runs from your project into this plugin's install directory, so the project builds only where this plugin is installed at that path — a teammate needs the plugin installed and the reference re-pointed at their copy (remove it with `dotnet remove reference`, then run the command again), and a CI runner without the plugin cannot build it. Say so when you hand the work over. If this plugin is reinstalled somewhere else, the reference dangles: re-point it the same way.
-
-> **Build against the project where it sits in this plugin; never copy the SDK source into your repository** — a copy is a fork the map stops describing. The map is read from that same source, which is also your build reference.
+> **Build against the package; never copy the SDK source into your repository** — a copy is a fork the map stops describing. The map is read from the read-only **reference clone** (*SDK source* below), never part of the build.
 
 ## SDK map — look up first, open the named file second, never grep
 
-The map sits at the SDK root **inside the SDK source bundled in this plugin** and always matches that source and these skills. It is **method-first**: operation contracts are on its pages; for model, enum and error shapes it names the file declaring each type, and you read the shape in that file. Every path below is relative to the SDK root, `sdk/dotnet/` in this plugin — the next section has the layout:
+The map sits at the SDK root **inside the SDK source repo** and always matches the source beside it. It is **method-first**: operation contracts are on its pages; for model, enum and error shapes it names the file declaring each type, and you read the shape in that file. Every path below is relative to the SDK root in the clone — obtain it first (next section):
 
 - **`sdk-map.md`** — the index and the read-once pages: SDK identity, client construction and the full options surface, the error-handling model (Case A typed / Case B raw), the **defaults table** for operations, the model/enum/error directory conventions, *Namespaces by content type*, and *Servers & auth*.
 - **`map/operations/`** — one page per controller, one block per operation: the exact C# signature with its request record's required members, the return type, the error case (A: typed `{Operation}Error` with its `TryGet…` accessors and their statuses / B: `RawError`), pagination and server-group bullets **only where they differ from the defaults**, and a **Type sources** table naming the file that declares every type the operation mentions.
 - **Shapes live in the source, one type per file.** Every file under `src/MaxioAdvancedBilling/Models/`, `src/MaxioAdvancedBilling/Errors/` and `src/MaxioAdvancedBilling/Requests/` declares exactly one public type named after the file, so a type name *is* its path (the directories are under *Layout* below), or take it from the operation's Type sources table. Read the fields, `required` flags, enum values and, on a model, the `[JsonPropertyName]` wire names from that one file, scoped (a request record is never serialized and carries none). The compiler is the backstop: a wrong name fails to build.
 
-**Never grep, glob, `find` or otherwise scan that source to locate anything** — the map and the name-is-path rule are the locator. Instead:
+**Never grep, glob, `find` or otherwise scan the clone to locate anything** — the map and the name-is-path rule are the locator. Instead:
 
 1. Open `sdk-map.md` and follow its controller table to the operations pages in scope; read every contract fact (signature, error accessors, pagination) by lookup.
 2. **Silence means the default.** The index's defaults table states what holds for every operation (throw-only, no pagination, the default server group, inputs as one request record); an operation's block states only what differs. A block silent on pagination has none — take the default and move on rather than opening the source to confirm it.
@@ -70,22 +68,36 @@ Keep lookups cheap — the rules that keep a session's context small:
 - When you do open a source file, read it **scoped**: with an offset/limit, or a search for the one symbol — never dump a whole file into the conversation.
 - Never open the SDK's `api-reference.md` — the map supersedes it.
 
-## SDK source — it is already here; the map lives inside it
+## SDK source — get it first; the map lives inside it
 
-The SDK source is where the map lives, and it ships with this plugin at `sdk/dotnet/` relative to the plugin root (the directory holding `skills/`), so **there is nothing to clone**: it already sits beside these skills. It is a read-only reference, never in the project repo, and it is also what your build references.
+The SDK source is where the map lives, so **getting it is the first step of SDK work this session, not a fallback**: one shallow clone at the recorded ref, into the **system temp directory** (`<temp>/maxio-advanced-billing-sdk-src/`), reused for the whole session. It is a read-only reference, never in the project repo, and **not** a build dependency.
 
-**Resolve its path once, up front**, at `<plugin-root>/sdk/dotnet/`, and reuse that path for the rest of your session.
+**Clone once, up front**, into a fresh timestamped folder under `<temp>/maxio-advanced-billing-sdk-src/`, and reuse that folder for the rest of your session:
 
-The source you read is the copy that ships in this plugin: there is no ref to pin. If a name from the map fails to compile, trust the compiler, re-read the source file the map's row names, and report the mismatch; never patch around it from memory.
+```bash
+# Linux/macOS:
+dir="${TMPDIR:-/tmp}/maxio-advanced-billing-sdk-src/$(date +%Y%m%d-%H%M%S)"
+git clone --filter=blob:none --branch main https://github.com/sohail2721/sohail-ab-sdk "$dir"
+# Reuse "$dir" for the rest of your session (it is your clone path).
+```
 
-The source stays in this plugin at `sdk/dotnet/`, and `maxio-advanced-billing-plan.md` cites it by that plugin-relative path — that path stays valid for anyone who loads this plugin.
+```powershell
+# Windows (PowerShell):
+$dir = "$env:TEMP\maxio-advanced-billing-sdk-src\$(Get-Date -Format yyyyMMdd-HHmmss)"
+git clone --filter=blob:none --branch main https://github.com/sohail2721/sohail-ab-sdk $dir
+# Reuse $dir for the rest of your session (it is your clone path).
+```
 
-Then confirm the SDK shape **only** from that source — not by either of these:
+The source you read is branch `main`: a branch is a moving target, not a pin — it can move after this plugin ships, and then the map you read describes code the package no longer matches. If a name from the map fails to compile, trust the compiler, re-read the source file the map's row names, and report the mismatch; never patch around it from memory.
+
+The clone stays in the system temp directory, and `maxio-advanced-billing-plan.md` never carries its path — the plan must stay portable.
+
+Then confirm the SDK shape **only** from the clone — not by either of these:
 
 - **Do not decompile or run reflection over the built assembly.** It drops what the source carries and the other skills rely on: the XML `<exception>`/parameter doc-comments and the exact parameter names and order.
-- **Do not fetch SDK files from the web one at a time** as your way in — `…/blob/…` pages return HTML, not source. Read the copy in this plugin instead.
+- **Do not fetch SDK files from the web one at a time** as your way in — `…/blob/…` pages return HTML, not source. Read the local clone instead; only if you truly cannot clone (`git` is unavailable), fetch a **raw** URL derived from the source repo above — never a `…/blob/…` page.
 
-Layout — where the SDK map's file references resolve, relative to the SDK root, `sdk/dotnet/` in this plugin (open these directly; do not scan for them):
+Layout — where the SDK map's file references resolve, relative to the SDK root in the clone (open these directly; do not scan for them):
 
 - `src/MaxioAdvancedBilling/Api/` — one file per controller/group; **this is where the operation methods live** (the HTTP verb and route, and the XML `<remarks>` docs carrying the endpoint's behavioural prose). The map's per-controller pages name the exact file.
 - `src/MaxioAdvancedBilling/Models/` (+ `src/MaxioAdvancedBilling/Models/Enums/`) — body and response models, unions and enums.
@@ -94,7 +106,7 @@ Layout — where the SDK map's file references resolve, relative to the SDK root
 - `src/MaxioAdvancedBilling/Core/` — HTTP infrastructure (the `SdkException` family, `RawError`, auth, retries, `SdkHook`).
 - `src/MaxioAdvancedBilling/Servers/`, `src/MaxioAdvancedBilling/MaxioAdvancedBillingClient.cs`, `src/MaxioAdvancedBilling/ServiceCollectionExtensions.cs` — environments, the client, DI.
 
-**Leave the source in place and unedited** — later steps reuse it, and an edit made in it is lost the next time this plugin is regenerated, so report what needs changing instead.
+**Leave the clone in place and unedited** — later steps reuse it instead of cloning again, and an edit made in it never reaches the SDK, so report what needs changing instead. The OS reaps the temp directory on its own.
 
 ## Idempotency — the real keys are on the map; the injected header is not one
 
