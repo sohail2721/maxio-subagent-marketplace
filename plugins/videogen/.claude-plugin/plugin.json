@@ -1,0 +1,16 @@
+{
+  "name": "videogen",
+  "displayName": "Videogen",
+  "version": "0.1.0",
+  "description": "Integrate and consume the APIMatic-generated Videogen SDK — bundled skills for Python.",
+  "author": {
+    "name": "APIMatic"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/python"
+  ],
+  "agents": [
+    "./scoped/agents/videogen-planner.md"
+  ]
+}
