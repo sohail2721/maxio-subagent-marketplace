@@ -35,7 +35,7 @@ However you start it:
 
 ### Step 1 — Plan first: the planner writes `maxio-advanced-billing-plan.md` (always, for any implementation work)
 
-Your FIRST action is to start **`maxio-advanced-billing-planner`**, as *The planner agent* says, once, with the user's full request and the name of this skill, `dotnet-integrate-maxio-advanced-billing`. Dictate in its task the absolute project root and the absolute path it must write to — `<project repo root>/maxio-advanced-billing-plan.md`, that exact path, always; never another location. It grounds and writes the plan and the contract sheet exactly as *How to ground* and the format below describe, and returns the file's path. Those subsections are its instructions and your reference: you read the sheet in that format, and you fill its `TBD` cells once the code compiles. Do the read-only prerequisites below in the same message as the start, and while it works.
+Your FIRST action, once you have reached the SDK source (the one prerequisite below that comes before the start), is to start **`maxio-advanced-billing-planner`**, as *The planner agent* says, once, with the user's full request and the name of this skill, `dotnet-integrate-maxio-advanced-billing`. Dictate in its task the absolute project root, the absolute path of the SDK source you reached — it reads the map and the source there rather than reaching its own — and the absolute path it must write to — `<project repo root>/maxio-advanced-billing-plan.md`, that exact path, always; never another location. It grounds and writes the plan and the contract sheet exactly as *How to ground* and the format below describe, and returns the file's path. Those subsections are its instructions and your reference: you read the sheet in that format, and you fill its `TBD` cells once the code compiles. Do the rest of the read-only prerequisites below in the same message as the start, and while it works.
 
 **If you couldn't start the planner** (case 2 in *The planner agent*), *How to ground* and the format are your own instructions: write the file yourself at that path. It is the only project-repo file you write before the HARD GATE further down.
 
@@ -46,11 +46,12 @@ Your FIRST action is to start **`maxio-advanced-billing-planner`**, as *The plan
 3. Open, scoped, the **declaring source file** for every request/response model you will reference — the operation's **Type sources** table names it — and take field names WITH their `[JsonPropertyName]` wire names, `required` flags, nullability, and the envelope shape. Enum value lists and union accessors come from their declaring files the same way.
 4. Map each in-scope step to the companion skill that governs it, as a trap note (format in §3 below).
 
-#### Prerequisites you can run alongside
+#### Prerequisites
 
-These need no SDK knowledge and touch no project file, so do them while the planner works — or alongside your own map work, if you are writing the plan yourself:
+**Reach the SDK source before you start the planner** (per `dotnet-getting-started`) — the map lives inside it, so this comes before any map work, and the planner reads the copy you reached rather than reaching its own.
 
-- reaching the SDK source (per `dotnet-getting-started` — the map lives inside it, so this comes before any map work);
+The rest need no SDK knowledge and touch no project file, so do them while the planner works — or alongside your own map work, if you are writing the plan yourself:
+
 - the repo survey (read-only exploration of conventions and layering) — record each convention as *pattern + the ONE exemplar file path to imitate*, NOT inline code snippets: you will read the exemplar at edit time anyway, so a snippet dump gets paid for twice;
 - `dotnet restore` and a baseline `dotnet build` / `dotnet test` of the UNTOUCHED solution, so later failures are attributable to your changes;
 - locating the SDK reference and its version in the project;
