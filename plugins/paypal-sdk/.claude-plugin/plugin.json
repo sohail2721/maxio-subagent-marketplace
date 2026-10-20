@@ -1,0 +1,16 @@
+{
+  "name": "paypal-sdk",
+  "displayName": "PayPal SDK Assistant",
+  "version": "0.1.0",
+  "description": "Integrate and consume the APIMatic-generated PayPal Server SDK SDK — bundled skills for Python.",
+  "author": {
+    "name": "APIMatic"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/python"
+  ],
+  "agents": [
+    "./scoped/agents/pay-pal-server-sdk-planner.md"
+  ]
+}
